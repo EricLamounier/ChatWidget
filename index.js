@@ -59,6 +59,10 @@ app.post('/send-message', (req, res) => {
   res.json({ status: 'Mensagem enviada', clientsOnline: count });
 });
 
+app.get('/check', (req, res) => {
+	res.status(200).json({status: 'ativo'})
+})
+
 server.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT} e https://meuappteste.loca.lt`);
 });
