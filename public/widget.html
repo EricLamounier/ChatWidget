@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Widget de Chat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+    .chat-messages::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+    }
+    .chat-messages::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+  </style>
+</head>
+<body class="bg-transparent">
+
+  <!-- Widget -->
+  <div id="chatWidget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <!-- Janela de Chat -->
+    <div id="chatWindow" class="hidden mb-4 w-80 h-96 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col">
+      <!-- Cabeçalho -->
+      <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+            💬
+          </div>
+          <div>
+            <h3 class="font-semibold text-sm">Suporte Online</h3>
+            <p class="text-xs text-blue-100">Estamos aqui para ajudar</p>
+          </div>
+        </div>
+        <button id="closeChat" class="text-white hover:text-blue-200">
+          ✖
+        </button>
+      </div>
+
+      <!-- Mensagens -->
+      <div id="chatMessages" class="chat-messages flex-1 overflow-y-auto p-4 bg-gray-50"></div>
+
+      <!-- Entrada -->
+      <div class="p-4 border-t border-gray-200 bg-white">
+        <div class="flex space-x-2">
+          <input
+            type="text"
+            id="messageInput"
+            placeholder="Digite sua mensagem..."
+            class="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            id="sendMessage"
+            class="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 py-2 transition-colors"
+          >
+            ➤
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botão flutuante -->
+    <button
+      id="chatButton"
+      class="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg transition-all flex items-center justify-center"
+    >
+      💬
+    </button>
+  </div>
+
+  <!-- Script -->
+  <script>
+    const chatButton = document.getElementById('chatButton');
+    const chatWindow = document.getElementById('chatWindow');
+    const closeChat = document.getElementById('closeChat');
+    const messageInput = document.getElementById('messageInput');
+    const sendMessage = document.getElementById('sendMessage');
+    const chatMessages = document.getElementById('chatMessages');
+
+    const socket = new WebSocket('ws://localhost:3001');
+
+    function toggleChat() {
+      chatWindow.classList.toggle('hidden');
+      if (!chatWindow.classList.contains('hidden')) {
+        messageInput.focus();
+      }
+    }
+
+    function addMessage(msg, fromUser = true) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'flex mb-3 ' + (fromUser ? 'justify-end' : 'justify-start');
+
+      const bubble = document.createElement('div');
+      bubble.className = (fromUser
+        ? 'bg-blue-600 text-white'
+        : 'bg-white text-gray-800 border') +
+        ' max-w-xs px-4 py-2 rounded-lg text-sm shadow';
+
+      bubble.textContent = msg;
+      wrapper.appendChild(bubble);
+      chatMessages.appendChild(wrapper);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    socket.onmessage = (event) => {
+      try {
+        const { sender, message } = JSON.parse(event.data);
+        if (sender === 'admin') {
+          addMessage(message, false);
+        }
+      } catch (e) {
+        console.error('Erro ao processar mensagem:', e);
+      }
+    };
+
+    sendMessage.onclick = () => {
+      const msg = messageInput.value.trim();
+      if (!msg) return;
+      addMessage(msg, true);
+      socket.send(JSON.stringify({ sender: 'user', message: msg }));
+      messageInput.value = '';
+    };
+
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage.click();
+    });
+
+    chatButton.onclick = toggleChat;
+    closeChat.onclick = toggleChat;
+  </script>
+</body>
+</html>

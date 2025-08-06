@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sistema Comum</title>
+  <style>
+    /* Reset simples */
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+    body, html {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+    }
+    /* Cabeçalho fixo */
+    header {
+      height: 60px;
+      background: #007bff;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      font-size: 20px;
+      font-weight: bold;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    /* Container principal com menu e conteúdo */
+    .container {
+      display: flex;
+      height: 100vh;
+      padding-top: 60px; /* espaço para header */
+    }
+    nav {
+      width: 220px;
+      background: #343a40;
+      color: white;
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      transition: background 0.3s;
+    }
+    nav a:hover {
+      background: #495057;
+    }
+    main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    p {
+      margin-bottom: 12px;
+      line-height: 1.5;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+<header>Sistema Comum - Dashboard</header>
+
+<div class="container">
+  <nav>
+    <a href="#">Dashboard</a>
+    <a href="#">Usuários</a>
+    <a href="#">Relatórios</a>
+    <a href="#">Configurações</a>
+  </nav>
+  <main>
+    <h1>Bem-vindo ao sistema!</h1>
+    <p>Aqui você pode controlar seus dados, visualizar relatórios e administrar sua aplicação.</p>
+    <p>Este é um exemplo simples de sistema comum, sem chat integrado.</p>
+  </main>
+</div>
+<script src="http://localhost:3001/widget.js"></script>
+</body>
+</html>
