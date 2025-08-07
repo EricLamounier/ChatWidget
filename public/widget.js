@@ -173,7 +173,7 @@
     try {
       const { sender, message } = JSON.parse(event.data);
       if (sender === 'admin') {
-        addMessage(message, false);
+        addMessage(message.message, false);
       }
     } catch (e) {
       console.error('[ChatWidget] Erro ao processar mensagem:', e);
