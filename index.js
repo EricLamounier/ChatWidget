@@ -26,7 +26,7 @@ wss.on('connection', (ws) => {
     clients.forEach((client) => {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify({
-		  sender: 'user', // ou pegue isso do objeto original
+		  sender: 'admin', // ou pegue isso do objeto original
 		  message: texto
 		}));
       }
