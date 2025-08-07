@@ -86,6 +86,11 @@
     <p>Este é um exemplo simples de sistema comum, sem chat integrado.</p>
   </main>
 </div>
-<script src="http://localhost:3001/widget.js"></script>
+<script>
+  window.ChatWidgetConfig = {
+    server: 'wss://chatwidget-s6sq.onrender.com'
+  };
+</script>
+<script src="https://chatwidget-s6sq.onrender.com/widget.js"></script>
 </body>
 </html>

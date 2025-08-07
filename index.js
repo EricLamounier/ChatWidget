@@ -25,7 +25,10 @@ wss.on('connection', (ws) => {
     // Broadcast para todos os outros clientes
     clients.forEach((client) => {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(message);
+        client.send(JSON.stringify({
+		  sender: 'user', // ou pegue isso do objeto original
+		  message: texto
+		}));
       }
     });
   });
@@ -64,5 +67,5 @@ app.get('/check', (req, res) => {
 })
 
 server.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT} e https://meuappteste.loca.lt`);
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
