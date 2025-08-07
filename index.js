@@ -12,13 +12,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 let clients = [];
-const PORT = 3001;
+const PORT = 8080;
 
 wss.on('connection', (ws) => {
   console.log('[WS] Cliente conectado');
   clients.push(ws);
   
-  ws.send(JSON.stringify({type: 1, message: 'Olá, como podemos te ajudar?', options: [{option: 'Falar com atendente', id: 1}, {option: 'Outro', id: 1}]}))
+  ws.send(JSON.stringify({type: 1, message: 'Olá, como podemos te ajudar?', 
+	options: [{option: 'Rastreio', id: 1}, {option: 'Falar com atendente', id: 2}, {option: 'Outro', id: 3}]}))
 
   ws.on('message', (message) => {
     const json = JSON.parse(message.toString());
