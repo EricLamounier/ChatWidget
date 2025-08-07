@@ -17,18 +17,17 @@ const PORT = 3001;
 wss.on('connection', (ws) => {
   console.log('[WS] Cliente conectado');
   clients.push(ws);
+  
+  ws.send(JSON.stringify({type: 1, message: 'Olá, como podemos te ajudar?', options: [{option: 'Falar com atendente', id: 1}, {option: 'Outro', id: 1}]}))
 
   ws.on('message', (message) => {
-    const texto = message.toString();
-	console.log('[WS] Mensagem recebida:', texto);
+    const json = JSON.parse(message.toString());
+	console.log('[WS] Mensagem recebida:', json);
 
     // Broadcast para todos os outros clientes
     clients.forEach((client) => {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({
-		  sender: 'admin', // ou pegue isso do objeto original
-		  message: texto
-		}));
+        client.send(JSON.stringify({type: 0, message: json.message}));
       }
     });
   });
@@ -54,7 +53,14 @@ app.post('/send-message', (req, res) => {
 
   clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(payload);
+      client.send(JSON.stringify({
+		  type: 1,
+		  message: 'teste',
+		  options: [
+		  {option: 'op1', id: 1},
+		  {option: 'op2', id: 2}
+		  ]
+	  }));
       count++;
     }
   });
